@@ -7,15 +7,17 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf().disable() // desabilita CSRF
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/swagger-ui.html", "/api-docs/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll() // permite todas as requisições
             );
-        // JWT config e outros filtros devem ser adicionados aqui
+
+        // JWT ou outros filtros podem ser adicionados aqui futuramente
+
         return http.build();
     }
 }
