@@ -2,6 +2,7 @@ com\motofacil\dto\LoginRequestDTO.class
 com\motofacil\entity\Funcionario.class
 com\motofacil\config\SwaggerConfig.class
 com\motofacil\MotofacilBackendApplication.class
+com\motofacil\service\AuthService.class
 com\motofacil\config\SecurityConfig.class
 com\motofacil\repository\AdministradorRepository.class
 com\motofacil\repository\LocationRepository.class
