@@ -9,19 +9,22 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
 public class SecurityConfig {
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/operador/**").hasRole("OPERADOR")
-                .antMatchers("/login", "/resources/**").permitAll()
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/operador/**").hasRole("OPERADOR")
+                .requestMatchers("/login", "/resources/**").permitAll()
                 .anyRequest().authenticated()
-            .and()
-            .formLogin()
+            )
+            .formLogin(form -> form
                 .loginPage("/login").permitAll()
-            .and()
-            .logout().permitAll();
+            )
+            .logout(logout -> logout.permitAll());
+
         return http.build();
     }
 
