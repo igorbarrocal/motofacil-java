@@ -16,4 +16,6 @@ C:\projetos\motofacil-java\src\main\java\com\motofacil\entity\Administrador.java
 C:\projetos\motofacil-java\src\main\java\com\motofacil\entity\Funcionario.java
 C:\projetos\motofacil-java\src\main\java\com\motofacil\dto\LoginRequestDTO.java
 C:\projetos\motofacil-java\src\main\java\com\motofacil\config\SecurityConfig.java
+C:\projetos\motofacil-java\src\main\java\com\motofacil\service\UserService.java
+C:\projetos\motofacil-java\src\main\java\com\motofacil\controller\UserController.java
 C:\projetos\motofacil-java\src\main\java\com\motofacil\repository\FuncionarioRepository.java

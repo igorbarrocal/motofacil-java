@@ -17,7 +17,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()   // login/cadastro liberado
+                .requestMatchers("/api/user/**").permitAll()   // libera user temporariamente
                 .anyRequest().authenticated()
             );
         return http.build();
