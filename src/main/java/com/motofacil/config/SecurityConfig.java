@@ -17,8 +17,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()   // login/cadastro liberado
-                .requestMatchers("/api/user/**").permitAll()   // libera user temporariamente
+                .requestMatchers("/api/auth/**").permitAll() // Permitir acesso público às rotas de autenticação temporalmente
+                .requestMatchers("/api/user/**").permitAll() // Permitir acesso público às rotas de autenticação e usuário temporalmente
+                .requestMatchers("/api/location/**").permitAll() // Permitir acesso público às rotas de localização temporalmente
                 .anyRequest().authenticated()
             );
         return http.build();
