@@ -34,5 +34,5 @@ public class Moto {
     private Patio patio;
 
     @OneToOne
-    private Location location;
+    private Location location; // Última localização (opcional)
 }

@@ -32,6 +32,7 @@ public class LocationController {
         location.setTimestamp(LocalDateTime.now());
         location.setMoto(moto);
 
+        // Atualiza a última localização na Moto
         moto.setLocation(location);
 
         return locationRepository.save(location);
