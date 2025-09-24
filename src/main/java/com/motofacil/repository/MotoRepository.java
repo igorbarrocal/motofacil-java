@@ -1,12 +1,11 @@
 package com.motofacil.repository;
 
 import com.motofacil.entity.Moto;
+import com.motofacil.entity.Patio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface MotoRepository extends JpaRepository<Moto, Long> {
-    Optional<Moto> findByPlaca(String placa);
-    Optional<Moto> findByChassi(String chassi);
-    Optional<Moto> findByCodigo(String codigo);
+    List<Moto> findByPatio(Patio patio);
 }

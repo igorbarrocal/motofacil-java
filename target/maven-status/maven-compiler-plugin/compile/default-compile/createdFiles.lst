@@ -6,6 +6,7 @@ com\motofacil\service\AuthService.class
 com\motofacil\config\SecurityConfig.class
 com\motofacil\repository\AdministradorRepository.class
 com\motofacil\repository\LocationRepository.class
+com\motofacil\controller\MotoController.class
 com\motofacil\repository\PatioRepository.class
 com\motofacil\entity\Location.class
 com\motofacil\repository\MotoRepository.class
@@ -17,4 +18,5 @@ com\motofacil\controller\LocationController.class
 com\motofacil\controller\AuthController.class
 com\motofacil\dto\LocationDTO.class
 com\motofacil\service\UserService.class
+com\motofacil\controller\PatioController.class
 com\motofacil\entity\Administrador.class
