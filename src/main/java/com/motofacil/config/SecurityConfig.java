@@ -20,6 +20,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll() // Permitir acesso público às rotas de autenticação temporalmente
                 .requestMatchers("/api/user/**").permitAll() // Permitir acesso público às rotas de autenticação e usuário temporalmente
                 .requestMatchers("/api/location/**").permitAll() // Permitir acesso público às rotas de localização temporalmente
+                .requestMatchers("/api/patios/**").permitAll() // Permitir acesso público às rotas de pátios temporalmente
+                .requestMatchers("/api/motos/**").permitAll() // Permitir acesso público às rotas de motos temporalmente
                 .anyRequest().authenticated()
             );
         return http.build();

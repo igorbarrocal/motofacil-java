@@ -2,7 +2,6 @@ package com.motofacil.repository;
 
 import com.motofacil.entity.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.Optional;
 

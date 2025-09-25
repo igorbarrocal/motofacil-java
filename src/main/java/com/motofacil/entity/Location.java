@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Location {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,10 +15,17 @@ public class Location {
 
     private LocalDateTime timestamp;
 
+    private String tag; // ex: "patio", "movimento"
+
     @ManyToOne
-    @JoinColumn(name = "moto_id") // FK para Moto
+    @JoinColumn(name = "moto_id")
     private Moto moto;
 
+    @ManyToOne
+    @JoinColumn(name = "patio_id")
+    private Patio patio;
+
+    // ===== Getters e Setters =====
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -30,6 +38,12 @@ public class Location {
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 
+    public String getTag() { return tag; }
+    public void setTag(String tag) { this.tag = tag; }
+
     public Moto getMoto() { return moto; }
     public void setMoto(Moto moto) { this.moto = moto; }
+
+    public Patio getPatio() { return patio; }
+    public void setPatio(Patio patio) { this.patio = patio; }
 }

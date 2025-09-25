@@ -26,7 +26,7 @@ public class Moto {
     private String categoria;
 
     @NotBlank
-    private String status;
+    private String status; // "patio", "mecanica", "pendente"
 
     private String descricao;
 
@@ -34,5 +34,5 @@ public class Moto {
     private Patio patio;
 
     @OneToOne
-    private Location location; // Última localização (opcional)
+    private Location location; // Última localização
 }

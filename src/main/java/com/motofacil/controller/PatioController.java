@@ -4,7 +4,6 @@ import com.motofacil.entity.Patio;
 import com.motofacil.repository.PatioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -14,29 +13,24 @@ public class PatioController {
     @Autowired
     private PatioRepository patioRepository;
 
-    // Criar novo pátio
     @PostMapping
     public Patio createPatio(@RequestBody Patio patio) {
-        if (patioRepository.existsByCodigoUnico(patio.getCodigoUnico())) {
+        if (patioRepository.existsByCodigoUnico(patio.getCodigoUnico()))
             throw new RuntimeException("Já existe um pátio com esse código único.");
-        }
         return patioRepository.save(patio);
     }
 
-    // Listar todos os pátios
     @GetMapping
     public List<Patio> getAllPatios() {
         return patioRepository.findAll();
     }
 
-    // Buscar pátio por ID
     @GetMapping("/{id}")
     public Patio getPatioById(@PathVariable Long id) {
         return patioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
     }
 
-    // Atualizar pátio
     @PutMapping("/{id}")
     public Patio updatePatio(@PathVariable Long id, @RequestBody Patio patioDetails) {
         Patio patio = patioRepository.findById(id)
@@ -51,12 +45,10 @@ public class PatioController {
         return patioRepository.save(patio);
     }
 
-    // Deletar pátio
     @DeleteMapping("/{id}")
     public void deletePatio(@PathVariable Long id) {
-        if (!patioRepository.existsById(id)) {
+        if (!patioRepository.existsById(id))
             throw new RuntimeException("Pátio não encontrado");
-        }
         patioRepository.deleteById(id);
     }
 }
