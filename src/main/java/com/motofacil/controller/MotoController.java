@@ -8,8 +8,10 @@ import com.motofacil.repository.LocationRepository;
 import com.motofacil.repository.MotoRepository;
 import com.motofacil.repository.PatioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.client.RestTemplate;
+import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,23 +48,64 @@ public class MotoController {
         Moto moto = motoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Moto não encontrada"));
 
-        Patio patio = patioRepository.findById(dto.getPatioId())
+        // Corrige para garantir que o patioId nunca seja nulo
+        Long patioId = dto.getPatioId() != null ? dto.getPatioId() : (moto.getPatio() != null ? moto.getPatio().getId() : null);
+        if (patioId == null)
+            throw new RuntimeException("É necessário informar um pátio para atualizar a localização.");
+
+        Patio patio = patioRepository.findById(patioId)
                 .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
 
+        // Chama simulador Python para pegar RSSI
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://" + patio.getEsp32Central() + ":5001/simulate";
+        Map<String, Object> payload = Map.of("id", moto.getId(), "x", dto.getX(), "y", dto.getY());
+        ResponseEntity<Map> response = restTemplate.postForEntity(url, payload, Map.class);
+
+        // Processar RSSI (response.getBody().get("rssiPorEsp")) e calcular posição via triangulação
+
         Location location = new Location();
-        location.setX(dto.getX());
+        location.setX(dto.getX()); // ou o resultado da triangulação
         location.setY(dto.getY());
         location.setTimestamp(LocalDateTime.now());
         location.setMoto(moto);
         location.setPatio(patio);
-        location.setTag(dto.getTag() != null ? dto.getTag() : "patio");
+        location.setTag("patio");
 
         locationRepository.save(location);
 
-        moto.setStatus(dto.getTag() != null ? dto.getTag() : "patio");
+        moto.setStatus("patio");
+        moto.setPatio(patio);
         motoRepository.save(moto);
 
         return moto;
+    }
+
+    // Atualizar status da moto (ex: para "mecanica", removendo localização/pátio)
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Moto> updateMotoStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        Moto moto = motoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Moto não encontrada"));
+        String novoStatus = body.get("status");
+        moto.setStatus(novoStatus);
+
+        if ("mecanica".equalsIgnoreCase(novoStatus)) {
+            moto.setPatio(null);
+            // Se quiser remover localização, pode buscar por Location e deletar, ou só não exibir no front
+        } else if ("patio".equalsIgnoreCase(novoStatus)) {
+            String patioIdStr = body.get("patioId");
+            Long patioId = patioIdStr != null ? Long.valueOf(patioIdStr) : null;
+            if (patioId == null)
+                throw new RuntimeException("Para voltar ao pátio, informe o patioId");
+            Patio patio = patioRepository.findById(patioId)
+                    .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
+            moto.setPatio(patio);
+            // status já está setado pra "patio"
+            // Não cria localização aqui: o front deve chamar /location depois, para setar a nova localização
+        }
+
+        motoRepository.save(moto);
+        return ResponseEntity.ok(moto);
     }
 
     // Última localização de uma moto

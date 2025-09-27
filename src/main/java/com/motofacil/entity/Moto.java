@@ -18,7 +18,7 @@ public class Moto {
     private String codigo;
     private String descricao;
 
-    private String status; // campo status!
+    private String status; 
 
     @ManyToOne
     private Patio patio;
