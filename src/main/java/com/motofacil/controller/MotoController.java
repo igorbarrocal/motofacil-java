@@ -48,25 +48,28 @@ public class MotoController {
         Moto moto = motoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Moto não encontrada"));
 
-        // Corrige para garantir que o patioId nunca seja nulo
-        Long patioId = dto.getPatioId() != null ? dto.getPatioId() : (moto.getPatio() != null ? moto.getPatio().getId() : null);
+        Long patioId = dto.getPatioId() != null ? dto.getPatioId()
+                : (moto.getPatio() != null ? moto.getPatio().getId() : null);
         if (patioId == null)
             throw new RuntimeException("É necessário informar um pátio para atualizar a localização.");
 
         Patio patio = patioRepository.findById(patioId)
                 .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
 
-        // Chama simulador Python para pegar RSSI
+        // Chama simulador Python para pegar a posição sorteada
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://" + patio.getEsp32Central() + ":5001/simulate";
         Map<String, Object> payload = Map.of("id", moto.getId(), "x", dto.getX(), "y", dto.getY());
         ResponseEntity<Map> response = restTemplate.postForEntity(url, payload, Map.class);
 
-        // Processar RSSI (response.getBody().get("rssiPorEsp")) e calcular posição via triangulação
+        Map pythonResp = response.getBody();
+        Map<String, Object> localizacaoSorteada = (Map<String, Object>) pythonResp.get("localizacaoSorteada");
+        float x = Float.parseFloat(localizacaoSorteada.get("x").toString());
+        float y = Float.parseFloat(localizacaoSorteada.get("y").toString());
 
         Location location = new Location();
-        location.setX(dto.getX()); // ou o resultado da triangulação
-        location.setY(dto.getY());
+        location.setX(x); // usa a posição sorteada do Python!
+        location.setY(y);
         location.setTimestamp(LocalDateTime.now());
         location.setMoto(moto);
         location.setPatio(patio);
@@ -91,7 +94,8 @@ public class MotoController {
 
         if ("mecanica".equalsIgnoreCase(novoStatus)) {
             moto.setPatio(null);
-            // Se quiser remover localização, pode buscar por Location e deletar, ou só não exibir no front
+            // Se quiser remover localização, pode buscar por Location e deletar, ou só não
+            // exibir no front
         } else if ("patio".equalsIgnoreCase(novoStatus)) {
             String patioIdStr = body.get("patioId");
             Long patioId = patioIdStr != null ? Long.valueOf(patioIdStr) : null;
@@ -101,7 +105,8 @@ public class MotoController {
                     .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
             moto.setPatio(patio);
             // status já está setado pra "patio"
-            // Não cria localização aqui: o front deve chamar /location depois, para setar a nova localização
+            // Não cria localização aqui: o front deve chamar /location depois, para setar a
+            // nova localização
         }
 
         motoRepository.save(moto);

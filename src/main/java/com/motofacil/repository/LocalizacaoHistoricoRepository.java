@@ -1,9 +1,13 @@
 package com.motofacil.repository;
 
-import com.motofacil.entity.LocalizacaoHistorico;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 import java.util.List;
+import com.motofacil.entity.LocalizacaoHistorico;
+import com.motofacil.entity.Moto;
 
 public interface LocalizacaoHistoricoRepository extends JpaRepository<LocalizacaoHistorico, Long> {
-    List<LocalizacaoHistorico> findByMotoIdOrderByTimestampDesc(Long motoId);
+    Optional<LocalizacaoHistorico> findTopByMotoOrderByTimestampDesc(Moto moto);
+    List<LocalizacaoHistorico> findByMotoOrderByTimestampDesc(Moto moto);
 }

@@ -24,4 +24,10 @@ public class LocalizacaoController {
     public List<LocalizacaoHistorico> historico(@PathVariable Long motoId) {
         return service.historicoPorMoto(motoId);
     }
+
+    // NOVO: Endpoint para última localização (igual frontend espera)
+    @GetMapping("/ultima/{motoId}")
+    public LocalizacaoHistorico ultimaLocalizacao(@PathVariable Long motoId) {
+        return service.ultimaLocalizacaoPorMoto(motoId);
+    }
 }
