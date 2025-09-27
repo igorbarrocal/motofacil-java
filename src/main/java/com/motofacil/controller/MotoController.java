@@ -59,17 +59,16 @@ public class MotoController {
 
         locationRepository.save(location);
 
-        moto.setLocation(location);
         moto.setStatus(dto.getTag() != null ? dto.getTag() : "patio");
-        return motoRepository.save(moto);
+        motoRepository.save(moto);
+
+        return moto;
     }
 
     // Última localização de uma moto
     @GetMapping("/{id}/location")
     public Location getMotoLocation(@PathVariable Long id) {
-        Moto moto = motoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Moto não encontrada"));
-        return moto.getLocation();
+        return locationRepository.findTopByMotoIdOrderByTimestampDesc(id).orElse(null);
     }
 
     // Histórico completo de uma moto
