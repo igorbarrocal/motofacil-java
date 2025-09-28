@@ -68,6 +68,50 @@ http://localhost:8080/swagger-ui.html
 
 ---
 
+# ESP Simulator Server
+
+Este projeto é um simulador de servidor ESP que simula dados RSSI (Received Signal Strength Indicator) para localização de motos em um pátio usando Flask.
+
+## Funcionalidades
+
+- Simula 5 ESPs posicionados em um pátio (4 nos cantos e 1 no centro)
+- Gera dados RSSI baseados na distância simulada
+- API REST para simulação e obtenção de coordenadas dos ESPs
+
+## Pré-requisitos
+
+- Python 3.6 ou superior
+- pip (gerenciador de pacotes do Python)
+
+## Instalação das Dependências
+
+1. **Clone ou baixe o projeto** [(se ainda não tiver feito)](https://github.com/Cruz-011/simuladorESPS.git)
+
+
+3. **Instale as dependências necessárias:**
+   ```bash
+   pip install flask
+
+
+## Como Iniciar o Projeto
+
+1. **Execute o servidor:**
+   ```bash
+   python esp_simulator_server.py
+   ```
+
+2. **O servidor será iniciado em:**
+   - Host: `0.0.0.0` (todas as interfaces de rede)
+   - Porta: `5001`
+   - URL local: `http://localhost:5001`
+
+3. **Você verá uma mensagem similar a:**
+   ```
+   * Running on all addresses (0.0.0.0)
+   * Running on http://127.0.0.1:5001
+   * Running on http://[seu-ip]:5001
+   ```
+
 ## 5️⃣ Clonando o Frontend
 
 Abra outro terminal e clone:
