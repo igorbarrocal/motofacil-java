@@ -1,40 +1,105 @@
 package com.motofacil.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import java.util.List;
+
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
 public class Moto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String placa;
-
-    @NotBlank
-    private String modelo;
-
     private String chassi;
-
-    @Column(unique = true)
-    private String codigo;
-
-    @NotBlank
+    private String modelo;
     private String categoria;
-
-    @NotBlank
-    private String status; // "patio", "mecanica", "pendente"
-
+    private String codigo;
     private String descricao;
+
+    private String status; 
 
     @ManyToOne
     private Patio patio;
 
-    @OneToOne(mappedBy = "moto", cascade = CascadeType.ALL)
-    @JsonManagedReference // serializa a Location, evitando loop
-    private Location location; // Última localização
+    @OneToMany(mappedBy = "moto")
+    @JsonManagedReference
+    private List<Location> locations;
+    // getters e setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
+    public String getChassi() {
+        return chassi;
+    }
+
+    public void setChassi(String chassi) {
+        this.chassi = chassi;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Patio getPatio() {
+        return patio;
+    }
+
+    public void setPatio(Patio patio) {
+        this.patio = patio;
+    }
+
+  
 }
