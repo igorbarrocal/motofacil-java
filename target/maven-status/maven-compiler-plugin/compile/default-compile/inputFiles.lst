@@ -12,6 +12,7 @@ C:\Users\win\motofacil-java\src\main\java\com\motofacil\repository\FuncionarioRe
 C:\Users\win\motofacil-java\src\main\java\com\motofacil\repository\LocationRepository.java
 C:\Users\win\motofacil-java\src\main\java\com\motofacil\repository\PatioRepository.java
 C:\Users\win\motofacil-java\src\main\java\com\motofacil\entity\LocalizacaoHistorico.java
+C:\Users\win\motofacil-java\src\main\java\com\motofacil\dto\LoginResponseDTO.java
 C:\Users\win\motofacil-java\src\main\java\com\motofacil\controller\AuthController.java
 C:\Users\win\motofacil-java\src\main\java\com\motofacil\entity\Patio.java
 C:\Users\win\motofacil-java\src\main\java\com\motofacil\controller\PatioController.java
