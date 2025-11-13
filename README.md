@@ -30,8 +30,8 @@ No arquivo `src/main/resources/application.properties`, configure:
 
 ```properties
 spring.datasource.url=jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
-spring.datasource.username=rm558238
-spring.datasource.password=111105
+spring.datasource.username=rmxxxxxx
+spring.datasource.password=xxxxxxx
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 
 spring.jpa.hibernate.ddl-auto=update
