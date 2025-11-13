@@ -1,6 +1,7 @@
 package com.motofacil.controller;
 
 import com.motofacil.dto.LoginRequestDTO;
+import com.motofacil.dto.LoginResponseDTO;
 import com.motofacil.entity.Administrador;
 import com.motofacil.entity.Funcionario;
 import com.motofacil.service.AuthService;
@@ -17,11 +18,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
-        String token = authService.login(loginRequest.getEmail(), loginRequest.getSenha());
-        if(token == null) {
+        LoginResponseDTO response = authService.login(loginRequest);
+        if (response == null) {
             return ResponseEntity.status(401).body("Usuário ou senha incorretos");
         }
-        return ResponseEntity.ok().body("{\"token\":\"" + token + "\"}");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register/admin")

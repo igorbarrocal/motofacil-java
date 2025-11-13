@@ -28,7 +28,6 @@ public class MotoController {
     @Autowired
     private PatioRepository patioRepository;
 
-    // Criar nova moto vinculada a um pátio
     @PostMapping
     public Moto createMoto(@RequestBody Moto moto) {
         if (moto.getPatio() == null || moto.getPatio().getId() == null)
@@ -37,12 +36,10 @@ public class MotoController {
         Patio patio = patioRepository.findById(moto.getPatio().getId())
                 .orElseThrow(() -> new RuntimeException("Pátio não encontrado."));
         moto.setPatio(patio);
-        moto.setStatus("pendente"); // status inicial
-
+        moto.setStatus("pendente");
         return motoRepository.save(moto);
     }
 
-    // Atualizar localização de uma moto (recebe dados reais do ESP)
     @PutMapping("/{id}/location")
     public Moto updateMotoLocation(@PathVariable Long id, @RequestBody LocationDTO dto) {
         Moto moto = motoRepository.findById(id)
@@ -56,7 +53,6 @@ public class MotoController {
         Patio patio = patioRepository.findById(patioId)
                 .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
 
-        // Chama simulador Python para pegar a posição sorteada
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://" + patio.getEsp32Central() + ":5001/simulate";
         Map<String, Object> payload = Map.of("id", moto.getId(), "x", dto.getX(), "y", dto.getY());
@@ -68,7 +64,7 @@ public class MotoController {
         float y = Float.parseFloat(localizacaoSorteada.get("y").toString());
 
         Location location = new Location();
-        location.setX(x); // usa a posição sorteada do Python!
+        location.setX(x);
         location.setY(y);
         location.setTimestamp(LocalDateTime.now());
         location.setMoto(moto);
@@ -84,7 +80,6 @@ public class MotoController {
         return moto;
     }
 
-    // Atualizar status da moto (ex: para "mecanica", removendo localização/pátio)
     @PutMapping("/{id}/status")
     public ResponseEntity<Moto> updateMotoStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         Moto moto = motoRepository.findById(id)
@@ -94,8 +89,6 @@ public class MotoController {
 
         if ("mecanica".equalsIgnoreCase(novoStatus)) {
             moto.setPatio(null);
-            // Se quiser remover localização, pode buscar por Location e deletar, ou só não
-            // exibir no front
         } else if ("patio".equalsIgnoreCase(novoStatus)) {
             String patioIdStr = body.get("patioId");
             Long patioId = patioIdStr != null ? Long.valueOf(patioIdStr) : null;
@@ -104,45 +97,46 @@ public class MotoController {
             Patio patio = patioRepository.findById(patioId)
                     .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
             moto.setPatio(patio);
-            // status já está setado pra "patio"
-            // Não cria localização aqui: o front deve chamar /location depois, para setar a
-            // nova localização
         }
 
         motoRepository.save(moto);
         return ResponseEntity.ok(moto);
     }
 
-    // Última localização de uma moto
     @GetMapping("/{id}/location")
     public Location getMotoLocation(@PathVariable Long id) {
         return locationRepository.findTopByMotoIdOrderByTimestampDesc(id).orElse(null);
     }
 
-    // Histórico completo de uma moto
     @GetMapping("/{id}/history")
     public List<Location> getMotoHistory(@PathVariable Long id) {
         return locationRepository.findByMotoIdOrderByTimestampDesc(id);
     }
 
-    // Listar todas as motos
     @GetMapping
     public List<Moto> getAllMotos() {
         return motoRepository.findAll();
     }
 
-    // Buscar moto por ID
     @GetMapping("/{id}")
     public Moto getMotoById(@PathVariable Long id) {
         return motoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Moto não encontrada"));
     }
 
-    // Listar motos por pátio
     @GetMapping("/patio/{patioId}")
     public List<Moto> getMotosByPatio(@PathVariable Long patioId) {
         Patio patio = patioRepository.findById(patioId)
                 .orElseThrow(() -> new RuntimeException("Pátio não encontrado"));
         return motoRepository.findByPatio(patio);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMoto(@PathVariable Long id) {
+        Moto moto = motoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Moto não encontrada"));
+
+        motoRepository.delete(moto);
+        return ResponseEntity.noContent().build();
     }
 }

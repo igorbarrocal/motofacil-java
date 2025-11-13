@@ -13,6 +13,7 @@ com\motofacil\service\LocalizacaoService.class
 com\motofacil\entity\Location.class
 com\motofacil\repository\MotoRepository.class
 com\motofacil\repository\FuncionarioRepository.class
+com\motofacil\dto\LoginResponseDTO.class
 com\motofacil\repository\LocalizacaoHistoricoRepository.class
 com\motofacil\controller\LocalizacaoController.class
 com\motofacil\entity\Moto.class

@@ -1,33 +1,32 @@
 package com.motofacil.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 import java.util.List;
 
-
 @Entity
 public class Moto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String placa;
     private String chassi;
     private String modelo;
     private String categoria;
     private String codigo;
     private String descricao;
-
-    private String status; 
+    private String status;
 
     @ManyToOne
     private Patio patio;
 
-    @OneToMany(mappedBy = "moto")
+    @OneToMany(mappedBy = "moto", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Location> locations;
-    // getters e setters
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -84,7 +83,6 @@ public class Moto {
         this.descricao = descricao;
     }
 
-
     public String getStatus() {
         return status;
     }
@@ -101,5 +99,11 @@ public class Moto {
         this.patio = patio;
     }
 
-  
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
 }
